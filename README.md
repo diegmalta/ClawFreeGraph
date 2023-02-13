@@ -1,5 +1,5 @@
 
-# ClawFreeGraph - Detector de Garra em Grafo
+# Detector de Garra em Grafo
 
 Este projeto foi realizado como trabalho na disciplina de "Algoritmos e Grafos" na Universidade Federal do Rio de Janeiro.
 
@@ -37,12 +37,74 @@ O grafo abaixo também é um grafo com garra, pois há o subgrafo 1-3-5-2 que fo
 ![App Screenshot](https://raw.githubusercontent.com/diegmalta/ClawFreeGraph/main/grafoSemGarra/myfiles/graph_images/graph1_image.png)
 
 
-## Uso
+## Lógica e Complexidade
+
+
+Dentro do código da classe 'Digraph.java', temos o algoritmo que identifica uma garra ou se não há garras no grafo. Analisando o algoritmo abaixo, ele possui complexidade O(n4), tendo 4 loops 'for' que dependem do tamanho do grafo.
+
+    public void identifica_semGarra(){
+        if(vertex_set.size()<4){
+            System.out.println("\n\n----------- É um Grafo Sem Garra -----------");
+            System.out.println("\nO Grafo nao possui vertices suficientes para ter uma Garra");
+        }
+        
+        for(Vertex v1:vertex_set.values()){
+            for(Vertex v2 : v1.nbhood.values()) { //pegamos os vizinhos de v1
+                if (v1.id != v2.id) {
+                    for (Vertex v3 : v1.nbhood.values())//pegamos o id dos vizinhos de v1
+                    {
+                        verificaGarra(v1, v2, v3);
+                    }
+                }
+            }
+        }
+        System.out.println("\n\n----------- É um Grafo Sem Garra -----------");
+        //é sem garra
+    }
+
+	private void verificaGarra(Vertex v1, Vertex v2, Vertex v3) {
+		if ((v1.id != v3.id) && (v2.id != v3.id)) {
+
+		    for (Vertex v4 : v1.nbhood.values()) {
+		        if ((v1.id != v4.id) && (v2.id != v4.id) && (v3.id != v4.id)) {
+		            if(!((v3.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v3.id)))){
+		                imprimeGarra(v1, v2, v3, v4);
+		            }
+		        }
+		    }
+		}
+	}
+
+	private void imprimeGarra(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+		System.out.println("\n\n----------- Possui Garra -----------");
+		System.out.println("             Vertice: " + v1.getId());
+		System.out.println("             Vizinho: " + v2.getId());
+		System.out.println("             Vizinho: " + v3.getId());
+		System.out.println("             Vizinho: " + v4.getId());
+    }
+## Como usar
 
 Na pasta "myfiles", é adicionado um grafo em arquivo .txt.
 
-Os nós são o primeiro caractere de cada linha.
-## Demonstração - Grafo sem garra
+#### A forma como é descrito um grafo é:
+
+O primeiro caractere de cada linha representa um nó.
+O segundo caractere é um sinal de igual (=).
+Após o sinal de igual, dígitos seguintes são os vizinhos do nó representado anteriormente ao sinal de igual (=).
+
+Por exemplo:  
+1 = 2 3 4  
+2 = 1  
+3 = 1  
+4 = 1  
+
+Temos um grafo com nós 1, 2, 3 e 4.  
+Sendo que 1 é vizinho dos nós 2, 3 e 4.  
+2 é vizinho do nó 1.
+3 é vizinho do nó 1.  
+4 é vizinho do nó 1.
+## Demonstração
+### Grafo sem garra
 
 Ao iniciar o programa, ele irá imprimir no console:
 
@@ -69,7 +131,7 @@ adicionado o vertice: 1 como vizinho do vertice: 4
 
 ----------- É um Grafo Sem Garra -----------  
 
-### Demonstração - Grafo com garra
+### Grafo com garra
 
 = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  
 Displaying Files from the directory : C:\Users\diegm\git\repository\grafoSemGarra\myfiles  
@@ -121,9 +183,15 @@ adicionado o vertice: 5 como vizinho do vertice: 7
              Vizinho: 6  
   
 #### Ele também imprime a primeira garra que o algoritmo encontrou.
-## Referência
+## Referências
 
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+ - BOAVENTURA NETTO, Paulo Oswaldo (2001). Grafos. Teoria, Modelos Algoritmos. São Paulo: Edgard Blücher. p. 263. ISBN 85-212-0292-X
+ - [Um Estudo das Estruturas de Grafos Sem Garras, Patrícia Rodrigues da Silva Soares](https://www.cos.ufrj.br/index.php/pt-BR/publicacoes-pesquisa/details/15/2649)
+ - [Claw-FreeGraph - Wolfram](https://mathworld.wolfram.com/Claw-FreeGraph.html)
+ - [Claw-FreeGraph - GraphClasses](https://www.graphclasses.org/classes/gc_62.html)
+ - [Claws-Survey](https://web.math.princeton.edu/~mchudnov/claws_survey.pdf)
 
+## Autores
+
+- [@diegmalta](https://www.github.com/diegmalta)
+- [@lucashelio](https://www.github.com/lucashelio)
