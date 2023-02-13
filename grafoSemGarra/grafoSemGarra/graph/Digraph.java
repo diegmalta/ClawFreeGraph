@@ -1,7 +1,5 @@
 package graph;
 import java.util.HashMap;
-import java.util.Queue;
-import java.util.LinkedList;
 
 public class Digraph {
 	// vertex set
@@ -77,50 +75,46 @@ public class Digraph {
     }
 
 
-    public int identifica_semGarra(){
-
-
-        //--------------------------- SEÇÃO DE VERIFICAÇÃO ------------------------
-
+    public void identifica_semGarra(){
         if(vertex_set.size()<4){
             System.out.println("\n\n----------- É um Grafo Sem Garra -----------");
             System.out.println("\nO Grafo nao possui vertices suficientes para ter uma Garra");
-            return 1;
         }
-
+        
         for(Vertex v1:vertex_set.values()){
-
-
-
             for(Vertex v2 : v1.nbhood.values()) { //pegamos os vizinhos de v1
                 if (v1.id != v2.id) {
-
                     for (Vertex v3 : v1.nbhood.values())//pegamos o id dos vizinhos de v1
                     {
-                        if ((v1.id != v3.id) && (v2.id != v3.id)) {
-
-                            for (Vertex v4 : v1.nbhood.values()) {
-                                if ((v1.id != v4.id) && (v2.id != v4.id) && (v3.id != v4.id)) {
-                                    if(!((v3.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v3.id)))){
-                                        //-------------------- SEÇÃO DE MENSAGENS -----------------------------
-                                        System.out.println("\n\n----------- Possui Garra -----------");
-                                        System.out.println("             Vertice: " + v1.getId());
-                                        System.out.println("             Vizinho: " + v2.getId());
-                                        System.out.println("             Vizinho: " + v3.getId());
-                                        System.out.println("             Vizinho: " + v4.getId());
-                                        return 0;
-                                    }
-                                }
-                            }
-                        }
+                        verificaGarra(v1, v2, v3);
                     }
                 }
             }
         }
-
         System.out.println("\n\n----------- É um Grafo Sem Garra -----------");
-        return 1;//é sem garra
+        //é sem garra
     }
+
+	private void verificaGarra(Vertex v1, Vertex v2, Vertex v3) {
+		if ((v1.id != v3.id) && (v2.id != v3.id)) {
+
+		    for (Vertex v4 : v1.nbhood.values()) {
+		        if ((v1.id != v4.id) && (v2.id != v4.id) && (v3.id != v4.id)) {
+		            if(!((v3.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v2.id)) || (v4.nbhood.containsKey(v3.id)))){
+		                imprimeGarra(v1, v2, v3, v4);
+		            }
+		        }
+		    }
+		}
+	}
+
+	private void imprimeGarra(Vertex v1, Vertex v2, Vertex v3, Vertex v4) {
+		System.out.println("\n\n----------- Possui Garra -----------");
+		System.out.println("             Vertice: " + v1.getId());
+		System.out.println("             Vizinho: " + v2.getId());
+		System.out.println("             Vizinho: " + v3.getId());
+		System.out.println("             Vizinho: " + v4.getId());
+	}
 
 /*
 	public void compact() {
@@ -161,8 +155,6 @@ public class Digraph {
 			if( small[ i ] == 0 )
 				small[ pairs++ ] = i;
 		}
-
-
 
 		for( i = 0; i < qbig; i++) {
 			int old_id = big[ i ].id;
@@ -228,8 +220,4 @@ public class Digraph {
         // generalizar para encontrar as
         // componentes conexas do grafo subjacente
     }
-
-
-
 }
-
